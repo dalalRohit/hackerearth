@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Container, Grid, Typography } from "@material-ui/core";
+import Card from "./components/RecipeCard";
 
-function App() {
+const Hero = ({ children }) => {
+  return <div className="hero">{children}</div>;
+};
+export default function App() {
+  const [loading, setLoading] = useState(false);
+  const [rec, setRec] = useState([]);
+
+  const fetchRecipes = () => {
+    setLoading(true);
+    axios
+      .get("http://starlord.hackerearth.com/recipe")
+      .then((res) => {
+        setRec(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        alert(err.message);
+        setLoading(false);
+      });
+  };
+  useEffect(() => {
+    fetchRecipes();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container disableGutters>
+      <Hero>
+        <Typography align="center" variant="h4" color="textPrimary">
+          MyRecipeApp
+        </Typography>
+      </Hero>
+      {loading ? (
+        "Loading"
+      ) : (
+        <Grid container justify="space-evenly" spacing={3}>
+          {rec.map((r) => {
+            return (
+              <Grid item key={r.id}>
+                <Card data={r} />
+              </Grid>
+            );
+          })}
+        </Grid>
+      )}
+    </Container>
   );
 }
-
-export default App;
