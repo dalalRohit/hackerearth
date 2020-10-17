@@ -81,7 +81,7 @@ export default function Form() {
             onClick={handleSubmit}
             type="submit"
             disabled={
-              Array.from(Object.values(values)).length ||
+              Array.from(Object.values(values)).length === 0 ||
               Array.from(Object.values(errors)).length
                 ? true
                 : false
