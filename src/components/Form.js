@@ -21,6 +21,7 @@ export default function Form() {
         cvc: "",
       }}
       onSubmit={(data) => {
+        console.log(data);
         alert("Card Data is valid. Redirect from here to payment Gateway. ");
       }}
       validate={() => {
@@ -37,7 +38,7 @@ export default function Form() {
         return errors;
       }}
     >
-      {({ handleSubmit, errors }) => (
+      {({ handleSubmit, errors, values }) => (
         <form className="form" onSubmit={handleSubmit}>
           <div>
             <PaymentInputsWrapper {...wrapperProps}>
@@ -79,7 +80,12 @@ export default function Form() {
             variant="contained"
             onClick={handleSubmit}
             type="submit"
-            disabled={Array.from(Object.values(errors)).length ? true : false}
+            disabled={
+              Array.from(Object.values(values)).length ||
+              Array.from(Object.values(errors)).length
+                ? true
+                : false
+            }
           >
             Submit
           </Button>
